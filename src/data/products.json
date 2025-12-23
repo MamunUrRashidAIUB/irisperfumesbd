@@ -1,0 +1,380 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "Rose Elegance",
+      "brand": "Iris Signature",
+      "price": 2500,
+      "originalPrice": 3000,
+      "discount": 17,
+      "image": "https://images.unsplash.com/photo-1541643600914-78b084683601?w=400",
+      "images": [
+        "https://images.unsplash.com/photo-1541643600914-78b084683601?w=400",
+        "https://images.unsplash.com/photo-1541643600914-78b084683601?w=400"
+      ],
+      "description": "A luxurious blend of Bulgarian roses with hints of jasmine and sandalwood",
+      "longDescription": "Rose Elegance is a timeless fragrance that captures the essence of romance. Crafted with the finest Bulgarian roses, this perfume opens with delicate floral notes, transitions into a heart of jasmine, and settles into a warm base of sandalwood and musk.",
+      "category": "Women",
+      "subcategory": "Floral",
+      "size": "100ml",
+      "stock": 25,
+      "rating": 4.8,
+      "reviews": 124,
+      "tags": ["bestseller", "floral", "romantic"],
+      "notes": {
+        "top": ["Rose", "Bergamot", "Pink Pepper"],
+        "middle": ["Jasmine", "Peony", "Lily of the Valley"],
+        "base": ["Sandalwood", "Musk", "Amber"]
+      },
+      "featured": true,
+      "newArrival": false
+    },
+    {
+      "id": 2,
+      "name": "Ocean Breeze",
+      "brand": "Aqua Fresh",
+      "price": 2200,
+      "originalPrice": 2500,
+      "discount": 12,
+      "image": "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=400",
+      "images": [
+        "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=400",
+        "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=400"
+      ],
+      "description": "Fresh aquatic notes with citrus and sea salt",
+      "longDescription": "Ocean Breeze transports you to a pristine beach at dawn. This refreshing fragrance combines crisp aquatic notes with zesty citrus and a touch of sea salt, creating an invigorating scent perfect for everyday wear.",
+      "category": "Unisex",
+      "subcategory": "Fresh",
+      "size": "100ml",
+      "stock": 40,
+      "rating": 4.5,
+      "reviews": 89,
+      "tags": ["fresh", "summer", "aquatic"],
+      "notes": {
+        "top": ["Lemon", "Bergamot", "Sea Salt"],
+        "middle": ["Marine Accord", "Lavender", "Mint"],
+        "base": ["White Musk", "Cedarwood", "Ambergris"]
+      },
+      "featured": true,
+      "newArrival": false
+    },
+    {
+      "id": 3,
+      "name": "Midnight Oud",
+      "brand": "Arabian Nights",
+      "price": 3500,
+      "originalPrice": 4200,
+      "discount": 17,
+      "image": "https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=400",
+      "images": [
+        "https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=400",
+        "https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=400"
+      ],
+      "description": "Rich oud with warm amber and exotic spices",
+      "longDescription": "Midnight Oud is a luxurious oriental fragrance that embodies sophistication and mystery. Premium oud wood from Cambodia blends with warm amber and exotic spices to create an unforgettable scent that lasts all day.",
+      "category": "Men",
+      "subcategory": "Oriental",
+      "size": "100ml",
+      "stock": 15,
+      "rating": 4.9,
+      "reviews": 156,
+      "tags": ["premium", "oud", "luxury"],
+      "notes": {
+        "top": ["Saffron", "Cardamom", "Black Pepper"],
+        "middle": ["Oud", "Rose", "Incense"],
+        "base": ["Amber", "Sandalwood", "Vanilla"]
+      },
+      "featured": true,
+      "newArrival": false
+    },
+    {
+      "id": 4,
+      "name": "Velvet Musk",
+      "brand": "Iris Signature",
+      "price": 2800,
+      "originalPrice": 3200,
+      "discount": 13,
+      "image": "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=400",
+      "images": [
+        "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=400",
+        "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=400"
+      ],
+      "description": "Soft musk with vanilla undertones and white florals",
+      "longDescription": "Velvet Musk is a sensual and comforting fragrance that wraps you in warmth. Soft white musk combines with creamy vanilla and delicate white florals to create a sophisticated scent perfect for evening occasions.",
+      "category": "Women",
+      "subcategory": "Musk",
+      "size": "100ml",
+      "stock": 30,
+      "rating": 4.7,
+      "reviews": 98,
+      "tags": ["sensual", "evening", "musk"],
+      "notes": {
+        "top": ["Pear", "Pink Pepper", "Bergamot"],
+        "middle": ["Jasmine", "Iris", "White Rose"],
+        "base": ["White Musk", "Vanilla", "Cashmere Wood"]
+      },
+      "featured": true,
+      "newArrival": false
+    },
+    {
+      "id": 5,
+      "name": "Citrus Burst",
+      "brand": "Fresh & Co",
+      "price": 1800,
+      "originalPrice": 2000,
+      "discount": 10,
+      "image": "https://images.unsplash.com/photo-1595425970377-c9703cf48b6d?w=400",
+      "images": [
+        "https://images.unsplash.com/photo-1595425970377-c9703cf48b6d?w=400",
+        "https://images.unsplash.com/photo-1595425970377-c9703cf48b6d?w=400"
+      ],
+      "description": "Energizing citrus blend with grapefruit and lime",
+      "longDescription": "Citrus Burst is a vibrant and energizing fragrance that awakens your senses. A zesty combination of grapefruit, lime, and orange creates an uplifting scent that's perfect for starting your day.",
+      "category": "Unisex",
+      "subcategory": "Citrus",
+      "size": "75ml",
+      "stock": 50,
+      "rating": 4.4,
+      "reviews": 67,
+      "tags": ["fresh", "daytime", "energizing"],
+      "notes": {
+        "top": ["Grapefruit", "Lime", "Orange"],
+        "middle": ["Neroli", "Green Tea", "Ginger"],
+        "base": ["White Cedar", "Musk", "Vetiver"]
+      },
+      "featured": false,
+      "newArrival": true
+    },
+    {
+      "id": 6,
+      "name": "Noir Intense",
+      "brand": "Dark Label",
+      "price": 3200,
+      "originalPrice": 3800,
+      "discount": 16,
+      "image": "https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=400",
+      "images": [
+        "https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=400",
+        "https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=400"
+      ],
+      "description": "Deep and mysterious with leather and tobacco",
+      "longDescription": "Noir Intense is a bold and daring fragrance for the confident man. Rich leather notes blend with smoky tobacco and warm spices to create a powerful and memorable scent.",
+      "category": "Men",
+      "subcategory": "Woody",
+      "size": "100ml",
+      "stock": 20,
+      "rating": 4.6,
+      "reviews": 112,
+      "tags": ["bold", "masculine", "intense"],
+      "notes": {
+        "top": ["Black Pepper", "Cardamom", "Lavender"],
+        "middle": ["Leather", "Tobacco", "Geranium"],
+        "base": ["Oud", "Benzoin", "Tonka Bean"]
+      },
+      "featured": false,
+      "newArrival": false
+    },
+    {
+      "id": 7,
+      "name": "Cherry Blossom",
+      "brand": "Sakura Dreams",
+      "price": 2400,
+      "originalPrice": 2800,
+      "discount": 14,
+      "image": "https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?w=400",
+      "images": [
+        "https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?w=400",
+        "https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?w=400"
+      ],
+      "description": "Delicate cherry blossom with soft powder",
+      "longDescription": "Cherry Blossom captures the ethereal beauty of spring in Japan. Delicate cherry blossom petals blend with soft powder and a hint of green tea for a feminine and graceful fragrance.",
+      "category": "Women",
+      "subcategory": "Floral",
+      "size": "100ml",
+      "stock": 35,
+      "rating": 4.7,
+      "reviews": 143,
+      "tags": ["spring", "feminine", "delicate"],
+      "notes": {
+        "top": ["Cherry Blossom", "Pear", "Lychee"],
+        "middle": ["Magnolia", "Green Tea", "Freesia"],
+        "base": ["White Musk", "Sandalwood", "Rice Powder"]
+      },
+      "featured": false,
+      "newArrival": true
+    },
+    {
+      "id": 8,
+      "name": "Spice Route",
+      "brand": "Arabian Nights",
+      "price": 2900,
+      "originalPrice": 3400,
+      "discount": 15,
+      "image": "https://images.unsplash.com/photo-1590736969955-71cc94901144?w=400",
+      "images": [
+        "https://images.unsplash.com/photo-1590736969955-71cc94901144?w=400",
+        "https://images.unsplash.com/photo-1590736969955-71cc94901144?w=400"
+      ],
+      "description": "Exotic spices with warm woody notes",
+      "longDescription": "Spice Route takes you on a journey through ancient trade routes. Exotic spices like cinnamon and clove blend with warm woody notes and sweet vanilla for an enchanting oriental fragrance.",
+      "category": "Unisex",
+      "subcategory": "Spicy",
+      "size": "100ml",
+      "stock": 22,
+      "rating": 4.5,
+      "reviews": 78,
+      "tags": ["exotic", "warm", "spicy"],
+      "notes": {
+        "top": ["Cinnamon", "Clove", "Nutmeg"],
+        "middle": ["Rose", "Saffron", "Cardamom"],
+        "base": ["Sandalwood", "Vanilla", "Amber"]
+      },
+      "featured": false,
+      "newArrival": false
+    },
+    {
+      "id": 9,
+      "name": "White Gardenia",
+      "brand": "Garden Collection",
+      "price": 2600,
+      "originalPrice": 3000,
+      "discount": 13,
+      "image": "https://images.unsplash.com/photo-1595425970377-c9703cf48b6d?w=400",
+      "images": [
+        "https://images.unsplash.com/photo-1595425970377-c9703cf48b6d?w=400",
+        "https://images.unsplash.com/photo-1595425970377-c9703cf48b6d?w=400"
+      ],
+      "description": "Pure white gardenia with tuberose",
+      "longDescription": "White Gardenia is a stunning floral fragrance that celebrates the beauty of white flowers. Lush gardenia and tuberose create a rich, intoxicating scent that's both elegant and sensual.",
+      "category": "Women",
+      "subcategory": "Floral",
+      "size": "100ml",
+      "stock": 28,
+      "rating": 4.8,
+      "reviews": 91,
+      "tags": ["elegant", "floral", "wedding"],
+      "notes": {
+        "top": ["Green Leaves", "Orange Blossom", "Ylang Ylang"],
+        "middle": ["Gardenia", "Tuberose", "Jasmine"],
+        "base": ["Coconut", "Sandalwood", "Musk"]
+      },
+      "featured": false,
+      "newArrival": true
+    },
+    {
+      "id": 10,
+      "name": "Gentleman's Club",
+      "brand": "Classic Men",
+      "price": 2700,
+      "originalPrice": 3100,
+      "discount": 13,
+      "image": "https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=400",
+      "images": [
+        "https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=400",
+        "https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=400"
+      ],
+      "description": "Classic masculine blend with bergamot and vetiver",
+      "longDescription": "Gentleman's Club is a refined and sophisticated fragrance for the modern man. Classic bergamot opens to a heart of aromatic herbs, settling into a base of vetiver and oakmoss.",
+      "category": "Men",
+      "subcategory": "Aromatic",
+      "size": "100ml",
+      "stock": 32,
+      "rating": 4.6,
+      "reviews": 104,
+      "tags": ["classic", "sophisticated", "office"],
+      "notes": {
+        "top": ["Bergamot", "Lemon", "Lavender"],
+        "middle": ["Geranium", "Rosemary", "Juniper"],
+        "base": ["Vetiver", "Oakmoss", "Cedar"]
+      },
+      "featured": false,
+      "newArrival": false
+    },
+    {
+      "id": 11,
+      "name": "Sweet Dreams",
+      "brand": "Iris Signature",
+      "price": 2300,
+      "originalPrice": 2700,
+      "discount": 15,
+      "image": "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=400",
+      "images": [
+        "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=400",
+        "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=400"
+      ],
+      "description": "Sweet vanilla and caramel with soft florals",
+      "longDescription": "Sweet Dreams is a cozy and comforting gourmand fragrance. Delicious vanilla and caramel notes blend with soft florals to create a warm, inviting scent perfect for cooler evenings.",
+      "category": "Women",
+      "subcategory": "Gourmand",
+      "size": "75ml",
+      "stock": 45,
+      "rating": 4.4,
+      "reviews": 86,
+      "tags": ["sweet", "cozy", "gourmand"],
+      "notes": {
+        "top": ["Praline", "Orange", "Pink Pepper"],
+        "middle": ["Jasmine", "Orange Blossom", "Caramel"],
+        "base": ["Vanilla", "Tonka Bean", "Musk"]
+      },
+      "featured": false,
+      "newArrival": false
+    },
+    {
+      "id": 12,
+      "name": "Forest Walk",
+      "brand": "Nature's Best",
+      "price": 2100,
+      "originalPrice": 2400,
+      "discount": 13,
+      "image": "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=400",
+      "images": [
+        "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=400",
+        "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=400"
+      ],
+      "description": "Fresh green notes with pine and moss",
+      "longDescription": "Forest Walk captures the essence of a morning stroll through a pristine forest. Fresh green notes blend with aromatic pine and earthy moss for a natural and invigorating fragrance.",
+      "category": "Unisex",
+      "subcategory": "Green",
+      "size": "100ml",
+      "stock": 38,
+      "rating": 4.3,
+      "reviews": 54,
+      "tags": ["fresh", "natural", "green"],
+      "notes": {
+        "top": ["Green Leaves", "Bergamot", "Galbanum"],
+        "middle": ["Pine", "Cypress", "Violet Leaf"],
+        "base": ["Oakmoss", "Vetiver", "Cedarwood"]
+      },
+      "featured": false,
+      "newArrival": true
+    }
+  ],
+  "categories": [
+    { "id": 1, "name": "Men", "slug": "men" },
+    { "id": 2, "name": "Women", "slug": "women" },
+    { "id": 3, "name": "Unisex", "slug": "unisex" }
+  ],
+  "subcategories": [
+    { "id": 1, "name": "Floral", "slug": "floral" },
+    { "id": 2, "name": "Fresh", "slug": "fresh" },
+    { "id": 3, "name": "Oriental", "slug": "oriental" },
+    { "id": 4, "name": "Woody", "slug": "woody" },
+    { "id": 5, "name": "Musk", "slug": "musk" },
+    { "id": 6, "name": "Citrus", "slug": "citrus" },
+    { "id": 7, "name": "Spicy", "slug": "spicy" },
+    { "id": 8, "name": "Aromatic", "slug": "aromatic" },
+    { "id": 9, "name": "Gourmand", "slug": "gourmand" },
+    { "id": 10, "name": "Green", "slug": "green" }
+  ],
+  "brands": [
+    { "id": 1, "name": "Iris Signature", "slug": "iris-signature" },
+    { "id": 2, "name": "Aqua Fresh", "slug": "aqua-fresh" },
+    { "id": 3, "name": "Arabian Nights", "slug": "arabian-nights" },
+    { "id": 4, "name": "Fresh & Co", "slug": "fresh-co" },
+    { "id": 5, "name": "Dark Label", "slug": "dark-label" },
+    { "id": 6, "name": "Sakura Dreams", "slug": "sakura-dreams" },
+    { "id": 7, "name": "Garden Collection", "slug": "garden-collection" },
+    { "id": 8, "name": "Classic Men", "slug": "classic-men" },
+    { "id": 9, "name": "Nature's Best", "slug": "natures-best" }
+  ]
+}
