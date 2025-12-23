@@ -84,6 +84,15 @@ export default function Navbar() {
             </Link>
           </li>
 
+          {/* Mobile Add to Cart */}
+          <li className="md:hidden text-center py-4 px-6">
+            <Link href="/cart" onClick={() => setIsOpen(false)}>
+              <button className="bg-yellow-400 text-indigo-900 px-6 py-2 rounded-full font-bold hover:bg-yellow-500 transition w-full">
+                Add to Cart
+              </button>
+            </Link>
+          </li>
+
           {/* Mobile login */}
           <li className="md:hidden text-center py-4 px-6">
             <Link href="/login" onClick={() => setIsOpen(false)}>
@@ -94,8 +103,13 @@ export default function Navbar() {
           </li>
         </ul>
 
-        {/* Desktop login */}
-        <div className="hidden md:block">
+        {/* Desktop buttons */}
+        <div className="hidden md:flex md:space-x-3">
+          <Link href="/cart">
+            <button className="bg-yellow-400 text-indigo-900 px-5 py-2 rounded-full shadow-md hover:bg-yellow-500 transition font-bold">
+              Add to Cart
+            </button>
+          </Link>
           <Link href="/login">
             <button className="bg-yellow-400 text-indigo-900 px-5 py-2 rounded-full shadow-md hover:bg-yellow-500 transition font-bold">
               Login
