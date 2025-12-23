@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { z } from "zod";
 
@@ -35,7 +34,6 @@ type FormErrors = {
 };
 
 export default function RegisterPage() {
-  const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -52,16 +50,6 @@ export default function RegisterPage() {
     { name: "Customer", value: "customer" },
     { name: "Admin", value: "admin" },
   ];
-
-  // Handle role change - redirect to admin register if admin is selected
-  const handleRoleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedRole = e.target.value;
-    if (selectedRole === "admin") {
-      router.push("/register/admin-register");
-    } else {
-      setRole(selectedRole);
-    }
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -121,7 +109,7 @@ export default function RegisterPage() {
               <select
                 id="role"
                 value={role}
-                onChange={handleRoleChange}
+                onChange={(e) => setRole(e.target.value)}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition text-gray-800 bg-white"
               >
                 {roles.map((r) => (
