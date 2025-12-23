@@ -42,7 +42,7 @@ export default function LoginPage() {
   const handleRoleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedRole = e.target.value;
     if (selectedRole === "admin") {
-      router.push("/login/admin-login");
+      router.push("/admin");
     } else {
       setRole(selectedRole);
     }

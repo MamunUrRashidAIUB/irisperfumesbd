@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { z } from "zod";
 
-// Zod schema for login form validation
+// Zod schema for admin login form validation
 const loginSchema = z.object({
   email: z
     .string()
@@ -21,20 +21,12 @@ type FormErrors = {
   password?: string;
 };
 
-export default function LoginPage() {
+export default function AdminLoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
-  const [role, setRole] = useState("customer");
-
-  const roles = [
-    { name: "Seller", value: "seller" },
-    { name: "Delivery", value: "delivery" },
-    { name: "Customer", value: "customer" },
-    { name: "Admin", value: "admin" },
-  ];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,12 +49,13 @@ export default function LoginPage() {
 
     setIsLoading(true);
     
-    // Simulate login - replace with actual authentication logic
-    console.log("Login attempt:", { email, password, role });
+    // Simulate admin login - replace with actual authentication logic
+    console.log("Admin Login attempt:", { email, password });
     
     setTimeout(() => {
       setIsLoading(false);
-      // Handle login success/failure here
+      // On success, redirect to /admin/dashboard
+      // router.push("/admin/dashboard");
     }, 1500);
   };
 
@@ -74,44 +67,25 @@ export default function LoginPage() {
           <Link href="/" className="text-4xl font-extrabold text-indigo-600 tracking-wide hover:text-indigo-800 transition">
             Iris Perfumes
           </Link>
-          <p className="text-gray-600 mt-2">Welcome back! Please login to your account.</p>
+          <p className="text-gray-600 mt-2">Admin Portal - Secure Access</p>
         </div>
 
-        {/* Login Card */}
+        {/* Admin Login Card */}
         <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
-          <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">Login</h2>
+          <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">Admin Login</h2>
           
           <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Role Dropdown */}
-            <div>
-              <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-1">
-                Login As
-              </label>
-              <select
-                id="role"
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition text-gray-800 bg-white"
-              >
-                {roles.map((r) => (
-                  <option key={r.value} value={r.value}>
-                    {r.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
             {/* Email Field */}
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                Email Address
+                Admin Email
               </label>
               <input
                 type="email"
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
+                placeholder="Enter admin email"
                 className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition text-gray-800 placeholder-gray-400 ${errors.email ? 'border-red-500' : 'border-gray-300'}`}
               />
               {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
@@ -178,11 +152,11 @@ export default function LoginPage() {
             <span className="px-4 text-sm text-gray-500">OR</span>
             <div className="flex-1 border-t border-gray-300"></div>
           </div>
-          {/* Register Link */}
-          <p className="text-center mt-6 text-gray-600">
-            Don&apos;t have an account?{" "}
-            <Link href="/register" className="text-purple-600 hover:text-purple-800 font-bold">
-              Sign up
+
+          {/* Back to Main Site */}
+          <p className="text-center text-gray-600">
+            <Link href="/" className="text-purple-600 hover:text-purple-800 font-bold">
+              ← Back to Main Site
             </Link>
           </p>
         </div>
