@@ -7,7 +7,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="bg-gradient-to-r from-indigo-600 via-purple-500 to-pink-500 text-white shadow-lg relative z-50">
+    <nav className="bg-indigo-600 text-white shadow-lg relative z-50">
       <div className="container mx-auto px-6 py-4 flex justify-between items-center">
 
         {/* Logo */}
