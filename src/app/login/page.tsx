@@ -2,15 +2,51 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { z } from "zod";
+
+// Zod schema for login form validation
+const loginSchema = z.object({
+  email: z
+    .string()
+    .min(1, "Email is required")
+    .email("Please enter a valid email address"),
+  password: z
+    .string()
+    .min(1, "Password is required")
+    .min(6, "Password must be at least 6 characters"),
+});
+
+type FormErrors = {
+  email?: string;
+  password?: string;
+};
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState<FormErrors>({});
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrors({});
+
+    // Validate form data with Zod
+    const result = loginSchema.safeParse({ email, password });
+
+    if (!result.success) {
+      const fieldErrors: FormErrors = {};
+      result.error.issues.forEach((error) => {
+        const field = error.path[0] as keyof FormErrors;
+        if (!fieldErrors[field]) {
+          fieldErrors[field] = error.message;
+        }
+      });
+      setErrors(fieldErrors);
+      return;
+    }
+
     setIsLoading(true);
     
     // Simulate login - replace with actual authentication logic
@@ -49,9 +85,9 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
-                required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition text-gray-800 placeholder-gray-400"
+                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition text-gray-800 placeholder-gray-400 ${errors.email ? 'border-red-500' : 'border-gray-300'}`}
               />
+              {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
             </div>
 
             {/* Password Field */}
@@ -66,8 +102,7 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
-                  required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition text-gray-800 placeholder-gray-400 pr-12"
+                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition text-gray-800 placeholder-gray-400 pr-12 ${errors.password ? 'border-red-500' : 'border-gray-300'}`}
                 />
                 <button
                   type="button"
@@ -77,6 +112,7 @@ export default function LoginPage() {
                   {showPassword ? "🙈" : "👁️"}
                 </button>
               </div>
+              {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
             </div>
 
             {/* Remember Me & Forgot Password */}
