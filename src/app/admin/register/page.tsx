@@ -33,7 +33,7 @@ type FormErrors = {
   confirmPassword?: string;
 };
 
-export default function RegisterPage() {
+export default function AdminRegisterPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -42,14 +42,6 @@ export default function RegisterPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
-  const [role, setRole] = useState("customer");
-
-  const roles = [
-    { name: "Seller", value: "seller" },
-    { name: "Delivery", value: "delivery" },
-    { name: "Customer", value: "customer" },
-    { name: "Admin", value: "admin" },
-  ];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -77,8 +69,8 @@ export default function RegisterPage() {
 
     setIsLoading(true);
     
-    // Simulate registration - replace with actual registration logic
-    console.log("Registration attempt:", { name, email, password, role });
+    // Simulate admin registration - replace with actual registration logic
+    console.log("Admin Registration attempt:", { name, email, password });
     
     setTimeout(() => {
       setIsLoading(false);
@@ -94,32 +86,13 @@ export default function RegisterPage() {
           <Link href="/" className="text-4xl font-extrabold text-indigo-600 tracking-wide hover:text-indigo-800 transition">
             Iris Perfumes
           </Link>
-          <p className="text-gray-600 mt-2">Create your account to get started.</p>
+          <p className="text-gray-600 mt-2">Create your admin account.</p>
         </div>
 
         {/* Register Card */}
         <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
-          <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">Sign Up</h2>
+          <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">Admin Sign Up</h2>
           <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Role Dropdown */}
-            <div>
-              <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-1">
-                Register As
-              </label>
-              <select
-                id="role"
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition text-gray-800 bg-white"
-              >
-                {roles.map((r) => (
-                  <option key={r.value} value={r.value}>
-                    {r.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
             {/* Name Field */}
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
@@ -213,7 +186,7 @@ export default function RegisterPage() {
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                 </svg>
               ) : null}
-              {isLoading ? "Creating Account..." : "Sign Up"}
+              {isLoading ? "Creating Account..." : "Sign Up as Admin"}
             </button>
           </form>
 
@@ -225,9 +198,14 @@ export default function RegisterPage() {
           </div>
           {/* Login Link */}
           <p className="text-center mt-6 text-gray-600">
-            Already have an account?{" "}
-            <Link href="/login" className="text-indigo-600 hover:text-indigo-800 font-bold">
-              Login
+            Already have an admin account?{" "}
+            <Link href="/admin" className="text-indigo-600 hover:text-indigo-800 font-bold">
+              Admin Login
+            </Link>
+          </p>
+          <p className="text-center mt-4 text-gray-600">
+            <Link href="/" className="text-purple-600 hover:text-purple-800 font-bold">
+              ← Back to Main Site
             </Link>
           </p>
         </div>
