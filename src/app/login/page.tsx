@@ -27,6 +27,14 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
+  const [role, setRole] = useState("customer");
+
+  const roles = [
+    { name: "Seller", value: "seller" },
+    { name: "Delivery", value: "delivery" },
+    { name: "Customer", value: "customer" },
+    { name: "Admin", value: "admin" },
+  ];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,7 +58,7 @@ export default function LoginPage() {
     setIsLoading(true);
     
     // Simulate login - replace with actual authentication logic
-    console.log("Login attempt:", { email, password });
+    console.log("Login attempt:", { email, password, role });
     
     setTimeout(() => {
       setIsLoading(false);
@@ -74,6 +82,25 @@ export default function LoginPage() {
           <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">Login</h2>
           
           <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Role Dropdown */}
+            <div>
+              <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-1">
+                Login As
+              </label>
+              <select
+                id="role"
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition text-gray-800 bg-white"
+              >
+                {roles.map((r) => (
+                  <option key={r.value} value={r.value}>
+                    {r.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
             {/* Email Field */}
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
