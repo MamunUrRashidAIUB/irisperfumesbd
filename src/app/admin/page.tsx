@@ -153,8 +153,16 @@ export default function AdminLoginPage() {
             <div className="flex-1 border-t border-gray-300"></div>
           </div>
 
-          {/* Back to Main Site */}
+          {/* Sign Up Link */}
           <p className="text-center text-gray-600">
+            Don&apos;t have an account?{" "}
+            <Link href="/admin/register" className="text-purple-600 hover:text-purple-800 font-bold">
+              Sign up as Admin
+            </Link>
+          </p>
+
+          {/* Back to Main Site */}
+          <p className="text-center mt-4 text-gray-600">
             <Link href="/" className="text-purple-600 hover:text-purple-800 font-bold">
               ← Back to Main Site
             </Link>
