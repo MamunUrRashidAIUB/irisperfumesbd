@@ -44,24 +44,7 @@ export default function RegisterPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
-  const [role, setRole] = useState("customer");
 
-  const roles = [
-    { name: "Seller", value: "seller" },
-    { name: "Delivery", value: "delivery" },
-    { name: "Customer", value: "customer" },
-    { name: "Admin", value: "admin" },
-  ];
-
-  // Handle role change - redirect to admin register if admin is selected
-  const handleRoleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedRole = e.target.value;
-    if (selectedRole === "admin") {
-      router.push("/register/admin-register");
-    } else {
-      setRole(selectedRole);
-    }
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -90,7 +73,7 @@ export default function RegisterPage() {
     setIsLoading(true);
     
     // Simulate registration - replace with actual registration logic
-    console.log("Registration attempt:", { name, email, password, role });
+    console.log("Registration attempt:", { name, email, password });
     
     setTimeout(() => {
       setIsLoading(false);
@@ -113,24 +96,7 @@ export default function RegisterPage() {
         <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
           <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">Sign Up</h2>
           <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Role Dropdown */}
-            <div>
-              <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-1">
-                Register As
-              </label>
-              <select
-                id="role"
-                value={role}
-                onChange={handleRoleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition text-gray-800 bg-white"
-              >
-                {roles.map((r) => (
-                  <option key={r.value} value={r.value}>
-                    {r.name}
-                  </option>
-                ))}
-              </select>
-            </div>
+
 
             {/* Name Field */}
             <div>

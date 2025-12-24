@@ -43,6 +43,7 @@ type FormErrors = {
 };
 
 export default function AdminRegisterPage() {
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -79,22 +80,39 @@ export default function AdminRegisterPage() {
     }
 
     setIsLoading(true);
-    
-    // Admin registration data - replace with actual API call
-    const adminData = {
-      name,
-      email,
-      password,
-      role: "admin",
-      status: "active",
-      nidNumber,
-    };
-    console.log("Admin Registration attempt:", adminData);
-    
-    setTimeout(() => {
+
+    try {
+      const response = await fetch("http://localhost:3000/admins", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+          role: "admin",
+          status: "active",
+          nidNumber,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log("Registration successful:", data);
+        // Redirect to login page after successful registration
+        window.location.href = "/admin";
+      } else {
+        // Handle error from backend
+        setErrors({ email: data.message || "Registration failed" });
+      }
+    } catch (error) {
+      console.error("Registration error:", error);
+      setErrors({ email: "Network error. Please try again." });
+    } finally {
       setIsLoading(false);
-      // Handle registration success/failure here
-    }, 1500);
+    }
   };
 
   return (
@@ -248,3 +266,4 @@ export default function AdminRegisterPage() {
     </div>
   );
 }
+

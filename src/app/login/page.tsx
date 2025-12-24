@@ -29,54 +29,53 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
-  const [role, setRole] = useState("customer");
 
-  const roles = [
-    { name: "Seller", value: "seller" },
-    { name: "Delivery", value: "delivery" },
-    { name: "Customer", value: "customer" },
-    { name: "Admin", value: "admin" },
-  ];
-
-  // Handle role change - redirect to admin login if admin is selected
-  const handleRoleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedRole = e.target.value;
-    if (selectedRole === "admin") {
-      router.push("/admin");
-    } else {
-      setRole(selectedRole);
-    }
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setErrors({});
+  e.preventDefault();
+  setErrors({});
 
-    // Validate form data with Zod
-    const result = loginSchema.safeParse({ email, password });
+  // Validate form data with Zod
+  const result = loginSchema.safeParse({ email, password });
 
-    if (!result.success) {
-      const fieldErrors: FormErrors = {};
-      result.error.issues.forEach((error) => {
-        const field = error.path[0] as keyof FormErrors;
-        if (!fieldErrors[field]) {
-          fieldErrors[field] = error.message;
-        }
-      });
-      setErrors(fieldErrors);
-      return;
+  if (!result.success) {
+    const fieldErrors: FormErrors = {};
+    result.error.issues.forEach((error) => {
+      const field = error.path[0] as keyof FormErrors;
+      if (!fieldErrors[field]) {
+        fieldErrors[field] = error.message;
+      }
+    });
+    setErrors(fieldErrors);
+    return;
+  }
+
+  setIsLoading(true);
+
+  try {
+    const response = await fetch("http://localhost:3000/admins/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      // Save token if present, then redirect
+      // localStorage.setItem("token", data.access_token || data.token);
+      router.push("/admin/dashboard"); // Change to your admin dashboard route
+    } else {
+      setErrors({ email: data.message || "Login failed" });
     }
+  } catch (error) {
+    setErrors({ email: "Network error. Please try again." });
+  } finally {
+    setIsLoading(false);
+  }
+};
 
-    setIsLoading(true);
-    
-    // Simulate login - replace with actual authentication logic
-    console.log("Login attempt:", { email, password, role });
-    
-    setTimeout(() => {
-      setIsLoading(false);
-      // Handle login success/failure here
-    }, 1500);
-  };
+
 
   return (
     <div className="min-h-screen bg-white flex items-center justify-center px-4 py-12">
@@ -94,24 +93,7 @@ export default function LoginPage() {
           <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">Login</h2>
           
           <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Role Dropdown */}
-            <div>
-              <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-1">
-                Login As
-              </label>
-              <select
-                id="role"
-                value={role}
-                onChange={handleRoleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition text-gray-800 bg-white"
-              >
-                {roles.map((r) => (
-                  <option key={r.value} value={r.value}>
-                    {r.name}
-                  </option>
-                ))}
-              </select>
-            </div>
+
 
             {/* Email Field */}
             <div>
