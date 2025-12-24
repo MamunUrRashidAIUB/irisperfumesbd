@@ -1,3 +1,6 @@
+// ADMIN LOGIN PAGE - Demonstrates Folder Based Routing
+// This page is at /admin (folder: src/app/admin/page.tsx)
+
 "use client";
 
 import Link from "next/link";
@@ -56,7 +59,7 @@ export default function AdminLoginPage() {
     
     setTimeout(() => {
       setIsLoading(false);
-      // On success, redirect to /admin/dashboard
+      // On success, redirect to /admin/dashboard (Folder Based Routing)
       router.push("/admin/dashboard");
     }, 1500);
   };

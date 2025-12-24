@@ -1,3 +1,6 @@
+// ADMIN REGISTRATION PAGE - Demonstrates Folder Based Routing
+// This page is at /admin/register (folder: src/app/admin/register/page.tsx)
+
 "use client";
 
 import Link from "next/link";
