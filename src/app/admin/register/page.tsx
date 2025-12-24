@@ -21,6 +21,11 @@ const registerSchema = z.object({
     .regex(/[a-z]/, "Password must contain at least one lowercase letter")
     .regex(/[0-9]/, "Password must contain at least one number"),
   confirmPassword: z.string(),
+  nidNumber: z
+    .string()
+    .min(10, "NID Number must be at least 10 characters")
+    .max(17, "NID Number must be at most 17 characters")
+    .regex(/^[0-9]+$/, "NID Number must contain only numbers"),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords do not match",
   path: ["confirmPassword"],
@@ -31,6 +36,7 @@ type FormErrors = {
   email?: string;
   password?: string;
   confirmPassword?: string;
+  nidNumber?: string;
 };
 
 export default function AdminRegisterPage() {
@@ -38,6 +44,7 @@ export default function AdminRegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [nidNumber, setNidNumber] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -53,6 +60,7 @@ export default function AdminRegisterPage() {
       email,
       password,
       confirmPassword,
+      nidNumber,
     });
 
     if (!result.success) {
@@ -69,8 +77,16 @@ export default function AdminRegisterPage() {
 
     setIsLoading(true);
     
-    // Simulate admin registration - replace with actual registration logic
-    console.log("Admin Registration attempt:", { name, email, password });
+    // Admin registration data - replace with actual API call
+    const adminData = {
+      name,
+      email,
+      password,
+      role: "admin",
+      status: "active",
+      nidNumber,
+    };
+    console.log("Admin Registration attempt:", adminData);
     
     setTimeout(() => {
       setIsLoading(false);
@@ -123,6 +139,22 @@ export default function AdminRegisterPage() {
                 className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition text-gray-800 placeholder-gray-400 ${errors.email ? 'border-red-500' : 'border-gray-300'}`}
               />
               {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+            </div>
+
+            {/* NID Number Field */}
+            <div>
+              <label htmlFor="nidNumber" className="block text-sm font-medium text-gray-700 mb-1">
+                NID Number
+              </label>
+              <input
+                type="text"
+                id="nidNumber"
+                value={nidNumber}
+                onChange={(e) => setNidNumber(e.target.value)}
+                placeholder="Enter your NID number"
+                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition text-gray-800 placeholder-gray-400 ${errors.nidNumber ? 'border-red-500' : 'border-gray-300'}`}
+              />
+              {errors.nidNumber && <p className="text-red-500 text-sm mt-1">{errors.nidNumber}</p>}
             </div>
 
             {/* Password Field */}
