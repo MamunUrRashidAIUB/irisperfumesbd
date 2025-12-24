@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { z } from "zod";
 
@@ -22,6 +23,7 @@ type FormErrors = {
 };
 
 export default function AdminLoginPage() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -55,7 +57,7 @@ export default function AdminLoginPage() {
     setTimeout(() => {
       setIsLoading(false);
       // On success, redirect to /admin/dashboard
-      // router.push("/admin/dashboard");
+      router.push("/admin/dashboard");
     }, 1500);
   };
 
