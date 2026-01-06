@@ -3,8 +3,11 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { z } from "zod";
+
+const API_URL = "http://localhost:3000";
 
 const registerSchema = z.object({
   name: z
@@ -38,9 +41,11 @@ type FormErrors = {
   password?: string;
   confirmPassword?: string;
   nidNumber?: string;
+  general?: string;
 };
 
 export default function AdminRegisterPage() {
+  const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -48,13 +53,14 @@ export default function AdminRegisterPage() {
   const [nidNumber, setNidNumber] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
+  const [successMessage, setSuccessMessage] = useState("");
 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrors({});
+    setSuccessMessage("");
 
-  
     const result = registerSchema.safeParse({
       name,
       email,
@@ -64,7 +70,6 @@ export default function AdminRegisterPage() {
     });
 
     if (!result.success) {
-    
       const fieldErrors: FormErrors = {};
       result.error.issues.forEach((error) => {
         const field = error.path[0] as keyof FormErrors;
@@ -74,18 +79,51 @@ export default function AdminRegisterPage() {
       return;
     }
 
- 
     setIsLoading(true);
     try {
-    
-      console.log("Form data is valid:", result.data);
+      const response = await fetch(`${API_URL}/admins`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+          nidNumber,
+          role: "admin",
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+       
+        if (data.message?.includes("email") || data.message?.includes("Email")) {
+          setErrors({ email: data.message });
+        } else {
+          setErrors({ general: data.message || "Registration failed. Please try again." });
+        }
+        return;
+      }
+
+      // Registration successful
+      setSuccessMessage("Account created successfully! Redirecting to login...");
       
-  
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      // Clear form
+      setName("");
+      setEmail("");
+      setPassword("");
+      setConfirmPassword("");
+      setNidNumber("");
+
       
-      alert("Registration successful!");
+      setTimeout(() => {
+        router.push("/admin");
+      }, 2000);
     } catch (error) {
       console.error("Registration failed:", error);
+      setErrors({ general: "Unable to connect to server. Please try again." });
     } finally {
       setIsLoading(false);
     }
@@ -101,6 +139,18 @@ export default function AdminRegisterPage() {
         </div>
 
         <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
+
+          {successMessage && (
+            <div className="bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded-lg text-sm mb-4">
+              {successMessage}
+            </div>
+          )}
+
+          {errors.general && (
+            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm mb-4">
+              {errors.general}
+            </div>
+          )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
     

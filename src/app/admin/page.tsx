@@ -22,7 +22,10 @@ const loginSchema = z.object({
 type FormErrors = {
   email?: string;
   password?: string;
+  general?: string;
 };
+
+const API_URL = "http://localhost:3000";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -35,7 +38,7 @@ export default function AdminLoginPage() {
     e.preventDefault();
     setErrors({});
 
-    // Validate form data with Zod
+    // Validate form data 
     const result = loginSchema.safeParse({ email, password });
 
     if (!result.success) {
@@ -51,11 +54,33 @@ export default function AdminLoginPage() {
     }
 
     setIsLoading(true);
-    // Simulate login delay and redirect
-    setTimeout(() => {
-      setIsLoading(false);
+    try {
+      const response = await fetch(`${API_URL}/admins/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setErrors({ general: data.message || "Invalid credentials" });
+        return;
+      }
+
+      
+      localStorage.setItem("admin_token", data.access_token);
+      
+      //  to dashboard
       router.push("/admin/dashboard");
-    }, 1000);
+    } catch (error) {
+      console.error("Login error:", error);
+      setErrors({ general: "Unable to connect to server. Please try again." });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -71,6 +96,12 @@ export default function AdminLoginPage() {
 
         <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
           <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">Admin Login</h2>
+          
+          {errors.general && (
+            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm mb-4">
+              {errors.general}
+            </div>
+          )}
           
           <form onSubmit={handleSubmit} className="space-y-5">
       
