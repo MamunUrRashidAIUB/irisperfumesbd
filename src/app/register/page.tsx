@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { z } from "zod";
+import { API_BASE_URL } from "@/lib/axios";
 
 // Zod schema for registration form validation
 const registerSchema = z.object({
