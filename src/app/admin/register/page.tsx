@@ -2,6 +2,7 @@
 
 "use client";
 
+import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -81,31 +82,13 @@ export default function AdminRegisterPage() {
 
     setIsLoading(true);
     try {
-      const response = await fetch(`${API_URL}/admins`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name,
-          email,
-          password,
-          nidNumber,
-          role: "admin",
-        }),
+      await axios.post(`${API_URL}/admins`, {
+        name,
+        email,
+        password,
+        nidNumber,
+        role: "admin",
       });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-       
-        if (data.message?.includes("email") || data.message?.includes("Email")) {
-          setErrors({ email: data.message });
-        } else {
-          setErrors({ general: data.message || "Registration failed. Please try again." });
-        }
-        return;
-      }
 
       // Registration successful
       setSuccessMessage("Account created successfully! Redirecting to login...");
@@ -123,7 +106,16 @@ export default function AdminRegisterPage() {
       }, 2000);
     } catch (error) {
       console.error("Registration failed:", error);
-      setErrors({ general: "Unable to connect to server. Please try again." });
+      if (axios.isAxiosError(error) && error.response) {
+        const message = error.response.data.message;
+        if (message?.includes("email") || message?.includes("Email")) {
+          setErrors({ email: message });
+        } else {
+          setErrors({ general: message || "Registration failed. Please try again." });
+        }
+      } else {
+        setErrors({ general: "Unable to connect to server. Please try again." });
+      }
     } finally {
       setIsLoading(false);
     }

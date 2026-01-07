@@ -2,6 +2,7 @@
 
 "use client";
 
+import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -55,29 +56,24 @@ export default function AdminLoginPage() {
 
     setIsLoading(true);
     try {
-      const response = await fetch(`${API_URL}/admins/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
+      const response = await axios.post(`${API_URL}/admins/login`, {
+        email,
+        password,
       });
 
-      const data = await response.json();
+      const data = response.data;
 
-      if (!response.ok) {
-        setErrors({ general: data.message || "Invalid credentials" });
-        return;
-      }
-
-      
       localStorage.setItem("admin_token", data.access_token);
       
       //  to dashboard
       router.push("/admin/dashboard");
     } catch (error) {
       console.error("Login error:", error);
-      setErrors({ general: "Unable to connect to server. Please try again." });
+      if (axios.isAxiosError(error) && error.response) {
+        setErrors({ general: error.response.data.message || "Invalid credentials" });
+      } else {
+        setErrors({ general: "Unable to connect to server. Please try again." });
+      }
     } finally {
       setIsLoading(false);
     }
