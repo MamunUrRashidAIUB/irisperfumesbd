@@ -1,181 +1,142 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
-import { z } from "zod";
-import axios from "axios";
 import { useRouter } from "next/navigation";
-import { API_BASE_URL } from "@/lib/axios";
+import { z } from "zod";
+import { API_BASE_URL } from "@/lib/axios"; // should be http://localhost:3000
 
-/* ================= ZOD SCHEMA ================= */
-
+// Zod schema for frontend validation
 const registerSchema = z
   .object({
-    name: z.string().min(2, "Name too short"),
-    email: z.string().email("Invalid email"),
+    email: z
+      .string()
+      .email("Enter a valid AIUB email")
+      .regex(/@aiub\.edu$/, "Email must be from aiub.edu domain"),
     password: z
       .string()
-      .min(6, "Minimum 6 characters")
-      .regex(/[0-9]/, "One number required"),
-    confirmPassword: z.string(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    path: ["confirmPassword"],
-    message: "Passwords do not match",
+      .min(6, "Password must be at least 6 characters")
+      .regex(/[A-Z]/, "Password must contain at least one uppercase letter"),
+    gender: z.enum(["male", "female"], "Gender must be male or female"),
+    phone: z.string().min(10, "Enter a valid phone number"),
   });
 
 type FormErrors = {
-  name?: string;
   email?: string;
   password?: string;
-  confirmPassword?: string;
-  general?: string;
+  gender?: string;
+  phone?: string;
 };
 
-export default function SellerRegisterPage() {
+export default function RegisterPage() {
   const router = useRouter();
-
   const [form, setForm] = useState({
-    name: "",
     email: "",
     password: "",
-    confirmPassword: "",
+    gender: "male",
+    phone: "",
   });
-
   const [errors, setErrors] = useState<FormErrors>({});
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  /* ================= HANDLERS ================= */
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (key: string, value: string) => {
+    setForm({ ...form, [key]: value });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrors({});
 
-    const validation = registerSchema.safeParse(form);
-
-    if (!validation.success) {
+    // Validate form
+    const result = registerSchema.safeParse(form);
+    if (!result.success) {
       const fieldErrors: FormErrors = {};
-      validation.error.issues.forEach((err) => {
-        fieldErrors[err.path[0] as keyof FormErrors] = err.message;
+      result.error.issues.forEach((issue) => {
+        const field = issue.path[0] as keyof FormErrors;
+        fieldErrors[field] = issue.message;
       });
       setErrors(fieldErrors);
       return;
     }
 
+    setIsLoading(true);
+
     try {
-      setLoading(true);
-
-      await axios.post(`${API_BASE_URL}/seller/register`, {
-        name: form.name,
-        email: form.email,
-        password: form.password,
+      const res = await fetch(`${API_BASE_URL}/seller/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
       });
 
-      router.push("/login");
-    } catch (err: any) {
-      setErrors({
-        general:
-          err.response?.data?.message || "Registration failed. Try again.",
-      });
+      if (!res.ok) {
+        const data = await res.json();
+        alert(data.message || "Registration failed. Try again.");
+        setIsLoading(false);
+        return;
+      }
+
+      alert("Registration successful!");
+      router.push("/login"); // redirect to login page
+    } catch (err) {
+      alert("Network error. Backend not reachable.");
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
-  /* ================= UI ================= */
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-100 flex items-center justify-center px-4">
-      <div className="w-full max-w-md bg-white rounded-xl shadow-xl p-8">
-        <h1 className="text-3xl font-extrabold text-center text-purple-700">
-          Seller Registration
-        </h1>
-        <p className="text-center text-gray-500 mt-2">
-          Create your seller account
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+      <form onSubmit={handleSubmit} className="w-full max-w-md bg-white p-8 rounded-xl shadow">
+        <h1 className="text-2xl font-bold text-center mb-6">Seller Registration</h1>
+
+        <input
+          type="email"
+          placeholder="Email"
+          value={form.email}
+          onChange={(e) => handleChange("email", e.target.value)}
+          className={`w-full p-3 mb-2 border rounded ${errors.email ? "border-red-500" : "border-gray-300"}`}
+        />
+        {errors.email && <p className="text-red-500 text-sm mb-2">{errors.email}</p>}
+
+        <input
+          type="password"
+          placeholder="Password"
+          value={form.password}
+          onChange={(e) => handleChange("password", e.target.value)}
+          className={`w-full p-3 mb-2 border rounded ${errors.password ? "border-red-500" : "border-gray-300"}`}
+        />
+        {errors.password && <p className="text-red-500 text-sm mb-2">{errors.password}</p>}
+
+        <select
+          value={form.gender}
+          onChange={(e) => handleChange("gender", e.target.value)}
+          className={`w-full p-3 mb-2 border rounded ${errors.gender ? "border-red-500" : "border-gray-300"}`}
+        >
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
+        {errors.gender && <p className="text-red-500 text-sm mb-2">{errors.gender}</p>}
+
+        <input
+          type="text"
+          placeholder="Phone"
+          value={form.phone}
+          onChange={(e) => handleChange("phone", e.target.value)}
+          className={`w-full p-3 mb-2 border rounded ${errors.phone ? "border-red-500" : "border-gray-300"}`}
+        />
+        {errors.phone && <p className="text-red-500 text-sm mb-2">{errors.phone}</p>}
+
+        <button
+          type="submit"
+          disabled={isLoading}
+          className="w-full bg-indigo-600 text-white py-3 rounded font-bold mt-4 hover:bg-indigo-700 transition disabled:opacity-50"
+        >
+          {isLoading ? "Registering..." : "Register"}
+        </button>
+
+        <p className="text-center mt-4 text-gray-600">
+          Already have an account? <a href="/login" className="text-indigo-600 font-semibold">Login</a>
         </p>
-
-        {errors.general && (
-          <p className="bg-red-100 text-red-700 p-3 rounded mt-4 text-sm">
-            {errors.general}
-          </p>
-        )}
-
-        <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-          <div>
-            <input
-              name="name"
-              placeholder="Full Name"
-              onChange={handleChange}
-              className="w-full px-4 py-3 border rounded-lg"
-            />
-            {errors.name && (
-              <p className="text-red-500 text-sm">{errors.name}</p>
-            )}
-          </div>
-
-          <div>
-            <input
-              name="email"
-              placeholder="Email Address"
-              onChange={handleChange}
-              className="w-full px-4 py-3 border rounded-lg"
-            />
-            {errors.email && (
-              <p className="text-red-500 text-sm">{errors.email}</p>
-            )}
-          </div>
-
-          <div>
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              onChange={handleChange}
-              className="w-full px-4 py-3 border rounded-lg"
-            />
-            {errors.password && (
-              <p className="text-red-500 text-sm">{errors.password}</p>
-            )}
-          </div>
-
-          <div>
-            <input
-              type="password"
-              name="confirmPassword"
-              placeholder="Confirm Password"
-              onChange={handleChange}
-              className="w-full px-4 py-3 border rounded-lg"
-            />
-            {errors.confirmPassword && (
-              <p className="text-red-500 text-sm">
-                {errors.confirmPassword}
-              </p>
-            )}
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-lg font-bold transition"
-          >
-            {loading ? "Creating Account..." : "Register as Seller"}
-          </button>
-        </form>
-
-        <p className="text-center text-gray-600 mt-6">
-          Already registered?{" "}
-          <Link
-            href="/login"
-            className="text-purple-700 font-semibold hover:underline"
-          >
-            Login here
-          </Link>
-        </p>
-      </div>
+      </form>
     </div>
   );
 }

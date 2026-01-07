@@ -1,15 +1,13 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
-import { z } from "zod";
-import axios from "axios";
 import { useRouter } from "next/navigation";
-import { API_BASE_URL } from "@/lib/axios";
+import { z } from "zod";
+import { API_BASE_URL } from "@/lib/axios"; // http://localhost:3000
 
-// Zod schema for login form validation
+// Zod schema for frontend validation
 const loginSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
+  email: z.string().email("Enter a valid email"),
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
@@ -20,27 +18,25 @@ type FormErrors = {
 
 export default function LoginPage() {
   const router = useRouter();
-
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [form, setForm] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState<FormErrors>({});
-  const [serverError, setServerError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleChange = (key: string, value: string) => {
+    setForm({ ...form, [key]: value });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrors({});
-    setServerError("");
 
-    // Zod validation (same pattern as register)
-    const result = loginSchema.safeParse({ email, password });
-
+    // Validate form
+    const result = loginSchema.safeParse(form);
     if (!result.success) {
       const fieldErrors: FormErrors = {};
-      result.error.issues.forEach((error) => {
-        const field = error.path[0] as keyof FormErrors;
-        fieldErrors[field] = error.message;
+      result.error.issues.forEach((issue) => {
+        const field = issue.path[0] as keyof FormErrors;
+        fieldErrors[field] = issue.message;
       });
       setErrors(fieldErrors);
       return;
@@ -49,132 +45,69 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      // SELLER LOGIN
-      const response = await axios.post(
-        `${API_BASE_URL}/seller/login`,
-        {
-          email,
-          password,
-        }
-      );
+      const res = await fetch(`${API_BASE_URL}/seller/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
 
-      // Save JWT
-      localStorage.setItem("access_token", response.data.access_token);
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.message || "Login failed. Check your credentials.");
+        setIsLoading(false);
+        return;
+      }
+
+      alert("Login successful!");
+
+      // Store sellerId returned from backend
+      localStorage.setItem("sellerToken", data.sellerId || "");
 
       // Redirect to dashboard
       router.push("/dashboard");
-    } catch (error: any) {
-      setServerError(
-        error?.response?.data?.message || "Invalid email or password"
-      );
+    } catch (err) {
+      alert("Network error. Backend not reachable.");
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center px-4 py-12">
-      <div className="w-full max-w-md">
-        {/* Logo / Brand */}
-        <div className="text-center mb-8">
-          <Link
-            href="/"
-            className="text-4xl font-extrabold text-indigo-600 tracking-wide hover:text-indigo-800 transition"
-          >
-            Iris Perfumes
-          </Link>
-          <p className="text-gray-600 mt-2">
-            Login to your seller account
-          </p>
-        </div>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+      <form onSubmit={handleSubmit} className="w-full max-w-md bg-white p-8 rounded-xl shadow">
+        <h1 className="text-2xl font-bold text-center mb-6">Seller Login</h1>
 
-        {/* Login Card */}
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
-          <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">
-            Seller Login
-          </h2>
+        <input
+          type="email"
+          placeholder="Email"
+          value={form.email}
+          onChange={(e) => handleChange("email", e.target.value)}
+          className={`w-full p-3 mb-2 border rounded ${errors.email ? "border-red-500" : "border-gray-300"}`}
+        />
+        {errors.email && <p className="text-red-500 text-sm mb-2">{errors.email}</p>}
 
-          <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Server error */}
-            {serverError && (
-              <p className="text-red-600 text-sm text-center">
-                {serverError}
-              </p>
-            )}
+        <input
+          type="password"
+          placeholder="Password"
+          value={form.password}
+          onChange={(e) => handleChange("password", e.target.value)}
+          className={`w-full p-3 mb-2 border rounded ${errors.password ? "border-red-500" : "border-gray-300"}`}
+        />
+        {errors.password && <p className="text-red-500 text-sm mb-2">{errors.password}</p>}
 
-            {/* Email */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Email Address
-              </label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 ${
-                  errors.email ? "border-red-500" : "border-gray-300"
-                }`}
-              />
-              {errors.email && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.email}
-                </p>
-              )}
-            </div>
+        <button
+          type="submit"
+          disabled={isLoading}
+          className="w-full bg-indigo-600 text-white py-3 rounded font-bold mt-4 hover:bg-indigo-700 transition disabled:opacity-50"
+        >
+          {isLoading ? "Logging in..." : "Login"}
+        </button>
 
-            {/* Password */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Password
-              </label>
-              <div className="relative">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter your password"
-                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 pr-12 ${
-                    errors.password ? "border-red-500" : "border-gray-300"
-                  }`}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
-                >
-                  {showPassword ? "🙈" : "👁️"}
-                </button>
-              </div>
-              {errors.password && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.password}
-                </p>
-              )}
-            </div>
-
-            {/* Login Button */}
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-lg font-bold text-lg transition disabled:opacity-50"
-            >
-              {isLoading ? "Logging in..." : "Login"}
-            </button>
-          </form>
-
-          {/* Register link */}
-          <p className="text-center mt-6 text-gray-600">
-            Don&apos;t have an account?{" "}
-            <Link
-              href="/register"
-              className="text-indigo-600 hover:text-indigo-800 font-bold"
-            >
-              Sign up
-            </Link>
-          </p>
-        </div>
-      </div>
+        <p className="text-center mt-4 text-gray-600">
+          Don't have an account? <a href="/register" className="text-indigo-600 font-semibold">Register</a>
+        </p>
+      </form>
     </div>
   );
 }
