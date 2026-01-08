@@ -110,7 +110,7 @@ export default function Navbar() {
               Add to Cart
             </button>
           </Link>
-          <Link href="/login">
+          <Link href="/delivery/login">
             <button className="bg-yellow-400 text-indigo-900 px-5 py-2 rounded-full shadow-md hover:bg-yellow-500 transition font-bold">
               Login
             </button>
