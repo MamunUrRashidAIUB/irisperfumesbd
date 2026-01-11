@@ -73,7 +73,7 @@ export default function AdminDashboard() {
             Add Product
           </button>
         </div>
-        {/* Modal */}
+       
         {showModal && (
           <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-40">
             <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md relative">
@@ -136,7 +136,7 @@ export default function AdminDashboard() {
             </div>
           </div>
         )}
-        <div className="bg-white rounded-lg shadow p-6">
+        {/* <div className="bg-white rounded-lg shadow p-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {products.map((product) => (
               <AdminProductCard
@@ -150,7 +150,7 @@ export default function AdminDashboard() {
               />
             ))}
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
