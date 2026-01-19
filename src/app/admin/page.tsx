@@ -1,14 +1,9 @@
-
-
 "use client";
-
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { z } from "zod";
-
-
 const loginSchema = z.object({
   email: z
     .string()
@@ -19,29 +14,23 @@ const loginSchema = z.object({
     .min(1, "Password is required")
     .min(6, "Password must be at least 6 characters"),
 });
-
 type FormErrors = {
   email?: string;
   password?: string;
   general?: string;
 };
-
 const API_URL = "http://localhost:3000";
-
 export default function AdminLoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrors({});
-
     // Validate form data 
     const result = loginSchema.safeParse({ email, password });
-
     if (!result.success) {
       const fieldErrors: FormErrors = {};
       result.error.issues.forEach((error) => {
@@ -53,29 +42,20 @@ export default function AdminLoginPage() {
       setErrors(fieldErrors);
       return;
     }
-
     setIsLoading(true);
     try {
       const response = await axios.post(`${API_URL}/admins/login`, {
         email,
         password,
       });
-
       const data = response.data;
-      console.log("Login response:", data); // Debug: see what backend returns
-
       localStorage.setItem("admin_token", data.access_token);
-      
-      // Decode JWT token to get admin ID
       const token = data.access_token;
       const payload = JSON.parse(atob(token.split('.')[1]));
-      console.log("JWT Payload:", payload); // Debug: see JWT contents
-      
       const adminId = payload.sub || payload.id || payload.adminId || data.id || data.adminId;
       if (adminId) {
         localStorage.setItem("admin_id", adminId.toString());
       }
-      
       //  to dashboard
       router.push("/admin/dashboard");
     } catch (error) {

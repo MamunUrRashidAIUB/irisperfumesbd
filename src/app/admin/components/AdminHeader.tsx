@@ -1,5 +1,4 @@
-// Admin Header Component - Demonstrates PROPS
-// Reusable header component for admin pages
+
 
 import Link from "next/link";
 

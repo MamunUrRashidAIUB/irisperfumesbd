@@ -1,12 +1,9 @@
-// DYNAMIC ROUTING - This page demonstrates Dynamic Routing
-// The [id] folder creates a dynamic route: /admin/dashboard/products/1, /admin/dashboard/products/2, etc.
-// The 'id' parameter is extracted from the URL using params
 
 import Link from "next/link";
 import productsData from "@/data/products.json";
 import AdminHeader from "../../../components/AdminHeader";
 
-// This is how we get the dynamic parameter from the URL
+
 interface PageProps {
   params: Promise<{
     id: string;
@@ -16,7 +13,7 @@ interface PageProps {
 export default async function ProductDetailPage({ params }: PageProps) {
   const { id } = await params;
   
-  // Find the product by ID from the URL parameter
+
   const product = productsData.products.find(p => p.id === parseInt(id));
 
   if (!product) {
@@ -41,7 +38,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
       <div className="max-w-4xl mx-auto p-6">
         <div className="bg-white rounded-lg shadow p-6">
           <div className="grid md:grid-cols-2 gap-6">
-            {/* Product Image */}
+            
             <div>
               <img 
                 src={product.image} 
@@ -50,7 +47,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
               />
             </div>
 
-            {/* Product Details */}
+          
             <div>
               <h1 className="text-2xl font-bold text-gray-800">{product.name}</h1>
               <p className="text-indigo-600 font-medium">{product.brand}</p>

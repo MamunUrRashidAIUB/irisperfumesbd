@@ -1,5 +1,4 @@
-// Admin Product Card Component - Demonstrates PROPS
-// Props are passed from parent to this child component
+
 
 interface AdminProductCardProps {
   id: number;
