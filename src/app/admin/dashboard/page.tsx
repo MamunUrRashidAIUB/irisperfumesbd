@@ -263,6 +263,7 @@ export default function AdminDashboard() {
                   price={product.price}
                   image={product.image || "/placeholder.png"}
                   stock={product.stock || 0}
+                  onDelete={handleDeleteProduct}
                 />
               ))}
             </div>

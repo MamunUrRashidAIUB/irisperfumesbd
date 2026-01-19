@@ -8,9 +8,11 @@ interface AdminProductCardProps {
   price: number;
   image: string;
   stock: number;
+  onDelete?: (id: number) => void;
+  onEdit?: () => void;
 }
 
-export default function AdminProductCard({ id, name, brand, price, image, stock }: AdminProductCardProps) {
+export default function AdminProductCard({ id, name, brand, price, image, stock, onDelete, onEdit }: AdminProductCardProps) {
   return (
     <div className="bg-white p-4 rounded-lg shadow hover:shadow-md transition">
       <img 
@@ -26,12 +28,25 @@ export default function AdminProductCard({ id, name, brand, price, image, stock 
           Stock: {stock}
         </span>
       </div>
-      <a 
-        href={`/admin/dashboard/products/${id}`}
-        className="mt-3 block text-center bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 transition text-sm"
-      >
-        View Details
-      </a>
+      <div className="flex gap-2 mt-3">
+        {onEdit && (
+          <button
+            onClick={onEdit}
+            className="flex-1 bg-yellow-500 text-white py-2 rounded hover:bg-yellow-600 transition text-sm"
+          >
+            Edit
+          </button>
+        )}
+        {onDelete && (
+          <button
+            onClick={() => onDelete(id)}
+            className="flex-1 bg-red-600 text-white py-2 rounded hover:bg-red-700 transition text-sm"
+          >
+            Delete
+          </button>
+        )}
+      </div>
+      
     </div>
   );
 }
