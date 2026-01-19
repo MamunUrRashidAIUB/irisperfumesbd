@@ -62,8 +62,19 @@ export default function AdminLoginPage() {
       });
 
       const data = response.data;
+      console.log("Login response:", data); // Debug: see what backend returns
 
       localStorage.setItem("admin_token", data.access_token);
+      
+      // Decode JWT token to get admin ID
+      const token = data.access_token;
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      console.log("JWT Payload:", payload); // Debug: see JWT contents
+      
+      const adminId = payload.sub || payload.id || payload.adminId || data.id || data.adminId;
+      if (adminId) {
+        localStorage.setItem("admin_id", adminId.toString());
+      }
       
       //  to dashboard
       router.push("/admin/dashboard");
