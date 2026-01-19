@@ -1,4 +1,4 @@
-
+import Link from "next/link";
 
 interface AdminProductCardProps {
   id: number;
@@ -45,7 +45,13 @@ export default function AdminProductCard({ id, name, brand, price, image, stock,
           </button>
         )}
       </div>
-      
+      {/* Dynamic Routing Link - navigates to /admin/dashboard/products/[id] */}
+      <Link 
+        href={`/admin/dashboard/products/${id}`}
+        className="block mt-2 text-center bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 transition text-sm"
+      >
+        View Details
+      </Link>
     </div>
   );
 }
