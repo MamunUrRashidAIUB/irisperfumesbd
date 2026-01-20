@@ -3,9 +3,9 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
-import { API_BASE_URL } from "@/lib/axios"; // http://localhost:3000
+import api from "@/lib/axios";
 
-// Zod schema for frontend validation
+// Zod schema
 const loginSchema = z.object({
   email: z.string().email("Enter a valid email"),
   password: z.string().min(6, "Password must be at least 6 characters"),
@@ -20,7 +20,7 @@ export default function LoginPage() {
   const router = useRouter();
   const [form, setForm] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState<FormErrors>({});
-  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (key: string, value: string) => {
     setForm({ ...form, [key]: value });
@@ -30,82 +30,81 @@ export default function LoginPage() {
     e.preventDefault();
     setErrors({});
 
-    // Validate form
     const result = loginSchema.safeParse(form);
     if (!result.success) {
       const fieldErrors: FormErrors = {};
       result.error.issues.forEach((issue) => {
-        const field = issue.path[0] as keyof FormErrors;
-        fieldErrors[field] = issue.message;
+        fieldErrors[issue.path[0] as keyof FormErrors] = issue.message;
       });
       setErrors(fieldErrors);
       return;
     }
 
-    setIsLoading(true);
+    setLoading(true);
 
     try {
-      const res = await fetch(`${API_BASE_URL}/seller/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
+      const res = await api.post("/seller/login", form);
 
-      const data = await res.json();
+      alert("Login successful");
 
-      if (!res.ok) {
-        alert(data.message || "Login failed. Check your credentials.");
-        setIsLoading(false);
-        return;
-      }
+      // Backend returns sellerId
+      localStorage.setItem("sellerToken", res.data.sellerId);
 
-      alert("Login successful!");
-
-      // Store sellerId returned from backend
-      localStorage.setItem("sellerToken", data.sellerId || "");
-
-      // Redirect to dashboard
       router.push("/dashboard");
-    } catch (err) {
-      alert("Network error. Backend not reachable.");
+    } catch (error: any) {
+      alert(
+        error?.response?.data?.message ||
+          "Login failed. Check credentials."
+      );
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-      <form onSubmit={handleSubmit} className="w-full max-w-md bg-white p-8 rounded-xl shadow">
-        <h1 className="text-2xl font-bold text-center mb-6">Seller Login</h1>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <form
+        onSubmit={handleSubmit}
+        className="w-full max-w-md bg-white p-8 rounded-xl shadow"
+      >
+        <h1 className="text-2xl font-bold text-center mb-6">
+          Seller Login
+        </h1>
 
         <input
           type="email"
           placeholder="Email"
           value={form.email}
           onChange={(e) => handleChange("email", e.target.value)}
-          className={`w-full p-3 mb-2 border rounded ${errors.email ? "border-red-500" : "border-gray-300"}`}
+          className="w-full p-3 mb-2 border rounded"
         />
-        {errors.email && <p className="text-red-500 text-sm mb-2">{errors.email}</p>}
+        {errors.email && (
+          <p className="text-red-500 text-sm">{errors.email}</p>
+        )}
 
         <input
           type="password"
           placeholder="Password"
           value={form.password}
           onChange={(e) => handleChange("password", e.target.value)}
-          className={`w-full p-3 mb-2 border rounded ${errors.password ? "border-red-500" : "border-gray-300"}`}
+          className="w-full p-3 mb-2 border rounded"
         />
-        {errors.password && <p className="text-red-500 text-sm mb-2">{errors.password}</p>}
+        {errors.password && (
+          <p className="text-red-500 text-sm">{errors.password}</p>
+        )}
 
         <button
-          type="submit"
-          disabled={isLoading}
-          className="w-full bg-indigo-600 text-white py-3 rounded font-bold mt-4 hover:bg-indigo-700 transition disabled:opacity-50"
+          disabled={loading}
+          className="w-full bg-indigo-600 text-white py-3 rounded mt-4"
         >
-          {isLoading ? "Logging in..." : "Login"}
+          {loading ? "Logging in..." : "Login"}
         </button>
 
-        <p className="text-center mt-4 text-gray-600">
-          Don't have an account? <a href="/register" className="text-indigo-600 font-semibold">Register</a>
+        <p className="text-center mt-4">
+          Don&apos;t have an account?{" "}
+          <a href="/register" className="text-indigo-600">
+            Register
+          </a>
         </p>
       </form>
     </div>

@@ -3,22 +3,27 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
-import { API_BASE_URL } from "@/lib/axios"; // should be http://localhost:3000
+import api from "@/lib/axios";
 
 // Zod schema for frontend validation
-const registerSchema = z
-  .object({
-    email: z
-      .string()
-      .email("Enter a valid AIUB email")
-      .regex(/@aiub\.edu$/, "Email must be from aiub.edu domain"),
-    password: z
-      .string()
-      .min(6, "Password must be at least 6 characters")
-      .regex(/[A-Z]/, "Password must contain at least one uppercase letter"),
-    gender: z.enum(["male", "female"], "Gender must be male or female"),
-    phone: z.string().min(10, "Enter a valid phone number"),
-  });
+const registerSchema = z.object({
+  email: z
+    .string()
+    .email("Enter a valid AIUB email")
+    .regex(/@aiub\.edu$/, "Email must be from aiub.edu domain"),
+  password: z
+    .string()
+    .min(6, "Password must be at least 6 characters")
+    .regex(/[A-Z]/, "Password must contain at least one uppercase letter"),
+gender: z
+  .string()
+  .refine((val) => val === "male" || val === "female", {
+    message: "Gender must be male or female",
+  }),
+
+
+  phone: z.string().min(10, "Enter a valid phone number"),
+});
 
 type FormErrors = {
   email?: string;
@@ -46,13 +51,12 @@ export default function RegisterPage() {
     e.preventDefault();
     setErrors({});
 
-    // Validate form
+    // Frontend validation
     const result = registerSchema.safeParse(form);
     if (!result.success) {
       const fieldErrors: FormErrors = {};
       result.error.issues.forEach((issue) => {
-        const field = issue.path[0] as keyof FormErrors;
-        fieldErrors[field] = issue.message;
+        fieldErrors[issue.path[0] as keyof FormErrors] = issue.message;
       });
       setErrors(fieldErrors);
       return;
@@ -61,23 +65,15 @@ export default function RegisterPage() {
     setIsLoading(true);
 
     try {
-      const res = await fetch(`${API_BASE_URL}/seller/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
-
-      if (!res.ok) {
-        const data = await res.json();
-        alert(data.message || "Registration failed. Try again.");
-        setIsLoading(false);
-        return;
-      }
+      await api.post("/seller/register", form);
 
       alert("Registration successful!");
-      router.push("/login"); // redirect to login page
-    } catch (err) {
-      alert("Network error. Backend not reachable.");
+      router.push("/login");
+    } catch (error: any) {
+      alert(
+        error?.response?.data?.message ||
+          "Registration failed. Try again."
+      );
     } finally {
       setIsLoading(false);
     }
@@ -85,45 +81,66 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-      <form onSubmit={handleSubmit} className="w-full max-w-md bg-white p-8 rounded-xl shadow">
-        <h1 className="text-2xl font-bold text-center mb-6">Seller Registration</h1>
+      <form
+        onSubmit={handleSubmit}
+        className="w-full max-w-md bg-white p-8 rounded-xl shadow"
+      >
+        <h1 className="text-2xl font-bold text-center mb-6">
+          Seller Registration
+        </h1>
 
         <input
           type="email"
           placeholder="Email"
           value={form.email}
           onChange={(e) => handleChange("email", e.target.value)}
-          className={`w-full p-3 mb-2 border rounded ${errors.email ? "border-red-500" : "border-gray-300"}`}
+          className={`w-full p-3 mb-2 border rounded ${
+            errors.email ? "border-red-500" : "border-gray-300"
+          }`}
         />
-        {errors.email && <p className="text-red-500 text-sm mb-2">{errors.email}</p>}
+        {errors.email && (
+          <p className="text-red-500 text-sm mb-2">{errors.email}</p>
+        )}
 
         <input
           type="password"
           placeholder="Password"
           value={form.password}
           onChange={(e) => handleChange("password", e.target.value)}
-          className={`w-full p-3 mb-2 border rounded ${errors.password ? "border-red-500" : "border-gray-300"}`}
+          className={`w-full p-3 mb-2 border rounded ${
+            errors.password ? "border-red-500" : "border-gray-300"
+          }`}
         />
-        {errors.password && <p className="text-red-500 text-sm mb-2">{errors.password}</p>}
+        {errors.password && (
+          <p className="text-red-500 text-sm mb-2">{errors.password}</p>
+        )}
 
         <select
           value={form.gender}
           onChange={(e) => handleChange("gender", e.target.value)}
-          className={`w-full p-3 mb-2 border rounded ${errors.gender ? "border-red-500" : "border-gray-300"}`}
+          className={`w-full p-3 mb-2 border rounded ${
+            errors.gender ? "border-red-500" : "border-gray-300"
+          }`}
         >
           <option value="male">Male</option>
           <option value="female">Female</option>
         </select>
-        {errors.gender && <p className="text-red-500 text-sm mb-2">{errors.gender}</p>}
+        {errors.gender && (
+          <p className="text-red-500 text-sm mb-2">{errors.gender}</p>
+        )}
 
         <input
           type="text"
           placeholder="Phone"
           value={form.phone}
           onChange={(e) => handleChange("phone", e.target.value)}
-          className={`w-full p-3 mb-2 border rounded ${errors.phone ? "border-red-500" : "border-gray-300"}`}
+          className={`w-full p-3 mb-2 border rounded ${
+            errors.phone ? "border-red-500" : "border-gray-300"
+          }`}
         />
-        {errors.phone && <p className="text-red-500 text-sm mb-2">{errors.phone}</p>}
+        {errors.phone && (
+          <p className="text-red-500 text-sm mb-2">{errors.phone}</p>
+        )}
 
         <button
           type="submit"
@@ -134,7 +151,10 @@ export default function RegisterPage() {
         </button>
 
         <p className="text-center mt-4 text-gray-600">
-          Already have an account? <a href="/login" className="text-indigo-600 font-semibold">Login</a>
+          Already have an account?{" "}
+          <a href="/login" className="text-indigo-600 font-semibold">
+            Login
+          </a>
         </p>
       </form>
     </div>
