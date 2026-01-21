@@ -2,9 +2,6 @@ import Link from "next/link";
 import productsData from "@/data/products.json";
 import { notFound } from "next/navigation";
 
-// This is a dynamic route - the [id] folder creates dynamic routing
-// URL: /products/1, /products/2, etc.
-
 interface ProductPageProps {
   params: Promise<{
     id: string;
@@ -15,10 +12,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const { id } = await params;
   const productId = parseInt(id);
   
-  // Find the product from our data
+
   const product = productsData.products.find((p) => p.id === productId);
 
-  // If product not found, show 404
+  
   if (!product) {
     notFound();
   }
